@@ -5,14 +5,13 @@
 	<groupId>edu.nix</groupId>
 	<artifactId>solr-education</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>solr-education</name>
-	<description>solr-education</description>
-	<packaging>pom</packaging>
+	<name>education-solr</name>
+	<description>education-solr</description>
 
 	<modules>
-		<module>search-books</module>
-        <module>nix-edu</module>
-		<module>indexing--lambda</module>
+		<module>custom-component</module>
 	</modules>
+
+	<packaging>pom</packaging>
 
 </project>
