@@ -10,7 +10,8 @@
 
 	<modules>
 		<module>custom-component</module>
-	</modules>
+        <module>indexing-lambda</module>
+    </modules>
 
 	<packaging>pom</packaging>
 
