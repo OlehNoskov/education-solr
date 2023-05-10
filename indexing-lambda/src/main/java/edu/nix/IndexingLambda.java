@@ -25,7 +25,7 @@ public class IndexingLambda {
         "http://ec2-13-50-246-93.eu-north-1.compute.amazonaws.com:8983/solr/books";
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final BasicAWSCredentials BASIC_AWS_CREDENTIALS =
-        new BasicAWSCredentials("AKIAZMJQNY5PBL4QCEV6", "m8luOrMPL5XO9M3Zh7VG5GeeCYVX32WNlznCueME");
+        new BasicAWSCredentials("accessKey", "secretKey");
 
     public String handleRequest(S3Event input) {
         String bucketName = input.getRecords().get(0).getS3().getBucket().getName();
