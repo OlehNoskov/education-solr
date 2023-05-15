@@ -1,13 +1,13 @@
 package edu.nix.filters;
 
 import com.google.common.base.Preconditions;
-import edu.nix.util.HTTPStatus;
 import java.io.IOException;
 import java.util.Set;
 import java.util.regex.Pattern;
 import org.apache.http.Header;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.lucene.analysis.TokenFilter;
@@ -18,7 +18,7 @@ public class ResolveUrlTokenFilter extends TokenFilter {
     private final CharTermAttribute termAttribute = addAttribute(CharTermAttribute.class);
     private static final Pattern SHORT_URL_PATTERN = Pattern.compile("https://bit.ly/\\w+");
     private static final Set<Integer> RESPONSE_CODES =
-        Set.of(HTTPStatus.MOVED_PERMANENTLY, HTTPStatus.MOVED_TEMPORARILY);
+        Set.of(HttpStatus.SC_MOVED_PERMANENTLY, HttpStatus.SC_MOVED_TEMPORARILY);
     private final HttpClient httpClient;
 
     protected ResolveUrlTokenFilter(TokenStream input, HttpClient httpClient) {

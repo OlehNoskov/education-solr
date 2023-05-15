@@ -14,16 +14,16 @@ import org.apache.solr.response.SolrQueryResponse;
 
 public class CensorHandler extends SearchHandler {
     private static final String BAD_WORDS_FILE = "bad-words.txt";
-    private static final Set<String> LIST_BAD_WORDS = new HashSet<>();
+    private static final Set<String> BAD_WORDS = new HashSet<>();
 
     static {
-        InputStream inputStream = CensorHandler.class.getClassLoader().getResourceAsStream(BAD_WORDS_FILE);
-        try {
+        try (InputStream inputStream = CensorHandler.class.getClassLoader()
+            .getResourceAsStream(BAD_WORDS_FILE)) {
             assert inputStream != null;
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
                 String word;
                 while ((word = reader.readLine()) != null) {
-                    LIST_BAD_WORDS.add(word.toLowerCase());
+                    BAD_WORDS.add(word);
                 }
             }
         } catch (IOException e) {
@@ -34,11 +34,10 @@ public class CensorHandler extends SearchHandler {
     @Override
     public void handleRequestBody(SolrQueryRequest request, SolrQueryResponse response)
         throws Exception {
-        String q = request.getParams().get(CommonParams.Q);
-        String query = StringUtils.substringAfter(q, ":").toLowerCase();
+        String query = request.getParams().get(CommonParams.Q);
 
-        for (String badWord : LIST_BAD_WORDS) {
-            if (badWord.contains(query)) {
+        for (String badWord : BAD_WORDS) {
+            if (StringUtils.containsIgnoreCase(query, badWord)) {
                 response.addResponse(
                     "Sorry, you typed a bad word: " + query);
                 return;
