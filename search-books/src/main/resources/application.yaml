@@ -1,0 +1,31 @@
+solr:
+  host: 'http://localhost:8983/solr/books'
+  core: 'books'
+
+search:
+  search-fields: "{\
+         title: 2.0, \  
+         author: 1.5, \
+         description: 1.0, \
+         tags: 1.2 \
+         }"
+  term-facets: "tags"
+  range-facets: "publication_date"
+
+spring:
+  sql:
+    init:
+      mode: always
+      data-locations: classpath:sql/init.sql
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: 'postgres'
+    password: 'mysecretpassword'
+    url: jdbc:postgresql://localhost:5432/postgres
+  jpa:
+    defer-datasource-initialization: true
+    show-sql: true
+    database-platform: 'org.hibernate.dialect.PostgreSQLDialect'
+    properties:
+      hibernate:
+        ddl-auto: create

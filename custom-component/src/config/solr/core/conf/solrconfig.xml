@@ -957,19 +957,6 @@
     </highlighting>
   </searchComponent>
 
-  <!--  itemtitle field suggester-->
-  <searchComponent name="suggest" class="solr.SuggestComponent">
-    <lst name="suggester">
-      <str name="name">titleSuggester</str>
-      <str name="lookupImpl">FuzzyLookupFactory</str>
-      <str name="dictionaryImpl">DocumentDictionaryFactory</str>
-      <str name="field">itemtitle</str>
-      <str name="weightField">price</str>
-      <str name="suggestAnalyzerFieldType">text_general</str>
-      <str name="buildOnStartup">true</str>
-    </lst>
-  </searchComponent>
-
   <requestHandler name="/suggest" class="solr.SearchHandler" startup="lazy">
     <lst name="defaults">
       <str name="suggest">true</str>
