@@ -19,13 +19,7 @@
         <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
         <fieldType name="text_general" class="solr.TextField" positionIncrementGap="10"/>
         <fieldType name="datetime" class="solr.TrieDateField" omitNorms="true">
-            <analyzer type="index">
-                <tokenizer class="solr.StandardTokenizerFactory"/>
-                <filter class="solr.StopFilterFactory" words="bad-words.txt" ignoreCase="true"/>
-                <filter class="solr.LowerCaseFilterFactory"/>
-                <filter class="solr.EnglishPossessiveFilterFactory"/>
-            </analyzer>
-            <analyzer type="query">
+            <analyzer>
                 <tokenizer class="solr.StandardTokenizerFactory"/>
                 <filter class="solr.StopFilterFactory" words="bad-words.txt" ignoreCase="true"/>
                 <filter class="solr.LowerCaseFilterFactory"/>

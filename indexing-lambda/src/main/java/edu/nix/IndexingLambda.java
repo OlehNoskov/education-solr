@@ -1,7 +1,5 @@
 package edu.nix;
 
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.lambda.runtime.events.S3Event;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -21,25 +19,19 @@ import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.common.SolrInputDocument;
 
 public class IndexingLambda {
-    private static final String SOLR_EC2_URL =
-        "http://ec2-13-50-246-93.eu-north-1.compute.amazonaws.com:8983/solr/books";
+    private static final String SOLR_EC2_URL = System.getenv("SOLR_EC2_URL");
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-    private static final BasicAWSCredentials BASIC_AWS_CREDENTIALS =
-        new BasicAWSCredentials("accessKey", "secretKey");
 
     public String handleRequest(S3Event input) {
         String bucketName = input.getRecords().get(0).getS3().getBucket().getName();
         String key = input.getRecords().get(0).getS3().getObject().getKey();
-
-        AmazonS3 amazonS3 = AmazonS3ClientBuilder.standard()
-            .withCredentials(new AWSStaticCredentialsProvider(BASIC_AWS_CREDENTIALS))
-            .withRegion("eu-north-1").build();
+        AmazonS3 amazonS3 = AmazonS3ClientBuilder.standard().build();
 
         String document;
         try {
             document = getS3Object(amazonS3.getObject(new GetObjectRequest(bucketName, key)));
         } catch (IOException e) {
-            throw new RuntimeException(e + "Bucket " + bucketName + " wasn't found!");
+            throw new RuntimeException(e.getMessage(), e.getCause());
         }
         indexDocument(document);
 
@@ -82,14 +74,9 @@ public class IndexingLambda {
         }
         for (Map<String, String> document : documents) {
             SolrInputDocument solrInputDocument = new SolrInputDocument();
-            document.keySet().forEach(field ->
-                addFieldsSolrInputDocument(solrInputDocument, field, document.get(field)));
+            document.keySet().forEach(field -> solrInputDocument.addField(field, document.get(field)));
             solrInputDocuments.add(solrInputDocument);
         }
         return solrInputDocuments;
-    }
-
-    private void addFieldsSolrInputDocument(SolrInputDocument solrInputDocument, String field, String value) {
-        solrInputDocument.addField(field, value);
     }
 }
