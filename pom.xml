@@ -7,12 +7,12 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>education-solr</name>
 	<description>education-solr</description>
+	<packaging>pom</packaging>
 
 	<modules>
 		<module>custom-component</module>
         <module>indexing-lambda</module>
-    </modules>
-
-	<packaging>pom</packaging>
+		<module>search-books</module>
+	</modules>
 
 </project>
