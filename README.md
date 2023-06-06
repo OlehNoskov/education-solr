@@ -45,6 +45,7 @@ The result is a knowledge base that describes the way we think when we write, re
 -book/search (принимает query) - возвращает отсортированные по релевантности док-ты. Шаг пагинации - 10
 -book/delete/{id} - удаление существующих документов
 -book - просмотр всех записей в PostgreSQL
+-init - индексакция базы данных поисковой системы
 
 Реализация поиска:
 -Solr
@@ -53,3 +54,19 @@ The result is a knowledge base that describes the way we think when we write, re
 Start PostgreSQL in Docker:
 1 option: docker run --name some-postgres -p 5432:5432 -e POSTGRES_PASSWORD=mysecretpassword -d postgres
 2 option: docker run -itd -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD= mysecretpassword -p 5432:5432 -v /data:/var/lib/postgresql/data --name postgresql postgres
+
+После создания document (Solr) или index (Elasticsearch) можно проиндексировать базы данных с помощью POST запроса по адресу: http://localhost:8080/init
+
+Пример JSON body для http://localhost:8080/add endpoint:
+
+{
+"author": "Test book",
+"title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+"description": "Clean Code is divided into three parts. The first describes the principles, patterns, and practices of writing clean code. The second part consists of several case studies of increasing complexity. Each case study is an exercise in cleaning up code—of transforming a code base that has some problems into one that is sound and efficient. The third part is the payoff: a single chapter containing a list of heuristics and “smells” gathered while creating the case studies. The result is a knowledge base that describes the way we think when we write, read, and clean code.",
+"tags": [
+{
+"tag": "Programming"
+}
+],
+"publicationDate": "2019-11-01T23:00:00Z"
+}
