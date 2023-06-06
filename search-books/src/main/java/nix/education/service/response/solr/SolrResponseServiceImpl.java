@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import nix.education.service.BookDataService;
 import nix.education.util.SearchConstants;
 import org.apache.commons.lang3.StringUtils;
@@ -15,21 +16,25 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.RangeFacet;
 import org.springframework.stereotype.Service;
 
+import static nix.education.util.ResponseMessages.DOCUMENTS_NOT_FOUND_MESSAGE;
+
 @Service
 @AllArgsConstructor
 public class SolrResponseServiceImpl implements SolrResponseService {
 
     private final BookDataService bookDataService;
 
+    @SneakyThrows
     @Override
     public Map<String, Object> prepareResponse(QueryResponse response) {
-        Map<String, Object> responseBody = new LinkedHashMap<>();
         if (response.getResults().isEmpty()) {
-            return Map.of("message", "Sorry, any documents weren't found!");
+            return DOCUMENTS_NOT_FOUND_MESSAGE;
         }
-        responseBody.put("numFound", response.getResults().size());
-        responseBody.put("docs", bookDataService.getBooks(getListBookByIds(response)));
-        responseBody.put("facet_counts", prepareFacets(response));
+        Map<String, Object> responseBody = new LinkedHashMap<>();
+        responseBody.put(SearchConstants.NUM_FOUND, response.getResults().size());
+        responseBody.put(SearchConstants.DOCS,
+            bookDataService.getBooks(getListBookByIds(response)));
+        responseBody.put(SearchConstants.FACET_COUNTS, prepareFacets(response));
         return responseBody;
     }
 
@@ -40,18 +45,22 @@ public class SolrResponseServiceImpl implements SolrResponseService {
     }
 
     private Map<String, Object> prepareFacets(QueryResponse response) {
-        Map<String, Object> facets = new HashMap<>();
-        response.getFacetFields().stream().map(e -> prepareFacets(e.getName(),
-            e.getValues())).forEach(e -> facets.put(
-            e.keySet().stream().findFirst().get(), e.values().stream().findFirst().get()));
-
+        Map<String, Object> facets = new LinkedHashMap<>();
         response.getFacetRanges().stream().map(e -> prepareRangeFacets(e.getName(),
             e.getCounts())).forEach(e -> facets.put(e.keySet()
             .stream().findFirst().get().toString(), e.values().stream().findFirst().get()));
+
+        response.getFacetFields().stream()
+            .map(e -> prepareFacets(e.getName(), e.getValues()))
+            .forEach(e -> facets.put(e.keySet().stream().findFirst().get(),
+                e.values().stream().findFirst().get()));
         return facets;
     }
 
     private Map<String, Object> prepareFacets(String name, List<FacetField.Count> buckets) {
+        if (name.equals("tags_str")) {
+            name = "tags";
+        }
         List<Object> bucketList = new ArrayList<>();
         for (FacetField.Count bucket : buckets) {
             Map<String, Object> values = new HashMap<>();

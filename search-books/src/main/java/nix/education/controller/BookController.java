@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BookController {
 
     @Autowired
-    @Qualifier("solrSearchService")
+    @Qualifier("elasticsearchService")
     private SearchService searchService;
 
     @GetMapping("/books")

@@ -23,6 +23,10 @@
         <spring-boot-test.version>3.0.6</spring-boot-test.version>
         <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
+        <elasticsearch.version>8.7.1</elasticsearch.version>
+        <spring-data-elasticsearch.version>5.1.0</spring-data-elasticsearch.version>
+        <maven-surefire-plugin.version>3.1.0</maven-surefire-plugin.version>
+        <byte-buddy.version>1.14.5</byte-buddy.version>
     </properties>
 
     <dependencies>
@@ -71,6 +75,36 @@
             <artifactId>commons-lang3</artifactId>
             <version>${commons-lang3.version}</version>
         </dependency>
+        <dependency>
+            <groupId>co.elastic.clients</groupId>
+            <artifactId>elasticsearch-java</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+            <version>${elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-elasticsearch</artifactId>
+            <version>${spring-data-elasticsearch.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>${maven-surefire-plugin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>${byte-buddy.version}</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
@@ -97,6 +131,14 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <skipTests>false</skipTests>
                 </configuration>
             </plugin>
         </plugins>
