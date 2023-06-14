@@ -90,6 +90,6 @@ public class SolrSearchService implements SearchService {
             solrClient.addBean(book);
         }
         solrClient.commit();
-        return "Core " + "\"" + coreName + "\"" + " was initialized successfully!";
+        return String.format("Core \"%s\" was initialized successfully!", coreName);
     }
 }

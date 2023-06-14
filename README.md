@@ -24,20 +24,21 @@ tags
 publication_date (range facet)
 
 Пример документа:
+
 {
-"id": 1,
-"author": "Robert Martin",
-"title": "Clean Code: A Handbook of Agile Software Craftsmanship",
-"description": "Clean Code is divided into three parts. The first describes the principles, patterns, and practices of writing clean code.
-The second part consists of several case studies of increasing complexity.
-Each case study is an exercise in cleaning up code—of transforming a code base that has some problems into one that is sound and efficient.
-The third part is the payoff: a single chapter containing a list of heuristics and “smells” gathered while creating the case studies.
-The result is a knowledge base that describes the way we think when we write, read, and clean code.",
-"tags": [
-"Programming",
-"Science"
-],
-"publication_date": "2012-12-01T21:59:59Z"
+    "id": 1,
+    "author": "Robert Martin",
+    "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+    "description": "Clean Code is divided into three parts. The first describes the principles, patterns, and practices of writing clean code.
+        The second part consists of several case studies of increasing complexity.
+        Each case study is an exercise in cleaning up code—of transforming a code base that has some problems into one that is sound and efficient.
+        The third part is the payoff: a single chapter containing a list of heuristics and “smells” gathered while creating the case studies.
+        The result is a knowledge base that describes the way we think when we write, read, and clean code.",
+    "tags": [
+        "Programming",
+        "Science"
+    ],
+    "publication_date": "2012-12-01T21:59:59Z"
 }
 
 Эндпоинты:
@@ -49,6 +50,7 @@ The result is a knowledge base that describes the way we think when we write, re
 
 Реализация поиска:
 -Solr
+-Elasticsearch
 
 База Данных - PostgreSQL
 Start PostgreSQL in Docker:
@@ -60,13 +62,74 @@ Start PostgreSQL in Docker:
 Пример JSON body для http://localhost:8080/add endpoint:
 
 {
-"author": "Test book",
-"title": "Clean Code: A Handbook of Agile Software Craftsmanship",
-"description": "Clean Code is divided into three parts. The first describes the principles, patterns, and practices of writing clean code. The second part consists of several case studies of increasing complexity. Each case study is an exercise in cleaning up code—of transforming a code base that has some problems into one that is sound and efficient. The third part is the payoff: a single chapter containing a list of heuristics and “smells” gathered while creating the case studies. The result is a knowledge base that describes the way we think when we write, read, and clean code.",
-"tags": [
-{
-"tag": "Programming"
+    "author": "Test book",
+    "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+    "description": "Clean Code is divided into three parts. The first describes the principles, patterns, and practices of writing clean code. The second part consists of several case studies of increasing complexity. Each case study is an exercise in cleaning up code—of transforming a code base that has some problems into one that is sound and efficient. The third part is the payoff: a single chapter containing a list of heuristics and “smells” gathered while creating the case studies. The result is a knowledge base that describes the way we think when we write, read, and clean code.",
+    "tags": [
+        {
+            "tag": "Programming"
+        }
+    ],
+    "publicationDate": "2019-11-01T23:00:00Z"
 }
-],
-"publicationDate": "2019-11-01T23:00:00Z"
+
+Пример создания index для Elasticsearch:
+
+PUT http://localhost:9200/books
+
+{
+    "settings": {
+        "index": {
+            "analysis": {
+                "analyzer": {
+                    "my_customized_analyzer": {
+                        "tokenizer": "standard",
+                        "filter": [
+                            "lowercase",
+                            "my_stop_filter",
+                            "kstem",
+                            "marker_filter",
+                            "synonym_filter"
+                        ]
+                    }
+                },
+                "filter": {
+                    "my_stop_filter": {
+                        "type": "stop",
+                        "stopwords_path": "stopwords.txt"
+                    },
+                    "marker_filter": {
+                        "type": "keyword_marker",
+                        "keywords_path": "analysis/keywords.txt"
+                    },
+                    "synonym_filter": {
+                        "type": "synonym",
+                        "synonyms_path": "analysis/synonym.txt"
+                    }
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "id": {
+                "type": "integer"
+            },
+            "author": {
+                "type": "text"
+            },
+            "title": {
+                "type": "text"
+            },
+            "description": {
+                "type": "text"
+            },
+            "tags": {
+                "type": "keyword"
+            },
+            "publicationDate": {
+                "type": "date"
+            }
+        }
+    }
 }

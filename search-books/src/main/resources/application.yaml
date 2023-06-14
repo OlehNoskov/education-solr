@@ -2,6 +2,11 @@ solr:
   host: 'http://localhost:8983/solr/books'
   core: 'books'
 
+elastic:
+  host: 'localhost'
+  port: 9200
+  index: 'books'
+
 search:
   search-fields: "{\
          title: 2.0, \  
@@ -9,8 +14,10 @@ search:
          description: 1.0, \
          tags: 1.2 \
          }"
-  term-facets: "tags"
+  term-facets: "tags_str"
+  elastic-term-facets: "tags"
   range-facets: "publication_date"
+  elastic-range-facets: "publicationDate"
 
 spring:
   sql:

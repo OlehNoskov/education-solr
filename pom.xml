@@ -18,20 +18,20 @@
 
     <properties>
         <solr.core.version>9.2.0</solr.core.version>
-        <junit.version>4.13.2</junit.version>
+        <mockito-core.version>5.3.1</mockito-core.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.solr</groupId>
             <artifactId>solr-core</artifactId>
             <version>${solr.core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>${mockito-core.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
