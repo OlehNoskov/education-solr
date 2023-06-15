@@ -16,11 +16,11 @@
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
-        <spring.boot.version>2.5.6</spring.boot.version>
+        <spring.boot.version>2.7.6</spring.boot.version>
         <jakarta.json.version>2.1.1</jakarta.json.version>
         <lombok.version>1.18.26</lombok.version>
         <postgresql.version>42.6.0</postgresql.version>
-        <spring-boot-test.version>3.0.6</spring-boot-test.version>
+        <spring-boot-test.version>2.7.6</spring-boot-test.version>
         <junit-jupiter.version>5.9.2</junit-jupiter.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
         <elasticsearch.version>8.7.1</elasticsearch.version>

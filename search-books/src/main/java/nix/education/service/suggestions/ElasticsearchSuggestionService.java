@@ -36,19 +36,22 @@ public class ElasticsearchSuggestionService implements SuggestionService {
     @Override
     @SneakyThrows
     public Map<String, Object> prepareAuthorSuggestionsResponse(String query) {
-        Map<String, FieldSuggester> suggesters = new HashMap<>();
-        suggesters.put(AUTHOR_SUGGESTER,
-            FieldSuggester.of(fs -> fs.term(f -> f.field(AUTHOR_FIELD))));
-        Suggester suggester = Suggester.of(s -> s.suggesters(suggesters).text(query));
-
-        SearchRequest request = new SearchRequest.Builder().index(index).suggest(suggester).build();
         SearchResponse<ElasticBook> response =
-            elasticsearchClient.search(request, ElasticBook.class);
+            elasticsearchClient.search(getSearchSuggesterRequest(query), ElasticBook.class);
 
         if (response.suggest().get(AUTHOR_SUGGESTER).get(0).term().options().isEmpty()) {
             return SUGGESTIONS_NOT_FOUND_MESSAGE;
         }
         return Map.of(SUGGEST, getAuthorSuggestion(response, query));
+    }
+
+    private SearchRequest getSearchSuggesterRequest(String query) {
+        Map<String, FieldSuggester> suggesters = new HashMap<>();
+        suggesters.put(AUTHOR_SUGGESTER,
+            FieldSuggester.of(fs -> fs.term(f -> f.field(AUTHOR_FIELD))));
+        Suggester suggester = Suggester.of(s -> s.suggesters(suggesters).text(query));
+
+        return new SearchRequest.Builder().index(index).suggest(suggester).build();
     }
 
     private Map<String, Object> getAuthorSuggestion(SearchResponse<ElasticBook> response,
