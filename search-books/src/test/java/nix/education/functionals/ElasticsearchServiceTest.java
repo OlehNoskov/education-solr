@@ -1,11 +1,8 @@
 package nix.education.functionals;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import lombok.SneakyThrows;
-import nix.education.entity.Book;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.HttpClient;
@@ -19,6 +16,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static nix.education.data.FileContentReader.MAPPER;
+import static nix.education.data.FileContentReader.readFileContent;
 import static nix.education.data.TestConstants.AUTHOR;
 import static nix.education.data.TestConstants.DESCRIPTION;
 import static nix.education.data.TestConstants.PUBLICATION_DATE;
@@ -27,9 +26,7 @@ import static nix.education.data.TestConstants.TITLE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ElasticsearchServiceTest {
-
-    private final HttpClient httpClient = HttpClientBuilder.create().build();
-    public static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final HttpClient httpClient = HttpClientBuilder.create().build();
 
     @Nested
     @DisplayName("\"findAll\" method should ")
@@ -70,8 +67,8 @@ public class ElasticsearchServiceTest {
         public void shouldAddNewBook() throws Exception {
             HttpPost request = new HttpPost("http://localhost:8080/add");
             request.addHeader("Content-Type", "application/json");
-            String pathFile = "src/test/resources/add-book-request.json";
-            String requestEntity = new String(Files.readAllBytes(Paths.get(pathFile)));
+            String filePath = "src/test/resources/add-book-request.json";
+            String requestEntity = new String(Files.readAllBytes(Paths.get(filePath)));
             StringEntity params = new StringEntity(requestEntity);
             request.setEntity(params);
             HttpResponse response = httpClient.execute(request);
@@ -102,8 +99,8 @@ public class ElasticsearchServiceTest {
         public void shouldDeleteBookById() throws Exception {
             HttpPost request = new HttpPost("http://localhost:8080/add");
             request.addHeader("Content-Type", "application/json");
-            String pathFile = "src/test/resources/add-book-request.json";
-            String requestEntity = new String(Files.readAllBytes(Paths.get(pathFile)));
+            String filePath = "src/test/resources/add-book-request.json";
+            String requestEntity = new String(Files.readAllBytes(Paths.get(filePath)));
             StringEntity params = new StringEntity(requestEntity);
             request.setEntity(params);
             HttpResponse response = httpClient.execute(request);
@@ -226,10 +223,5 @@ public class ElasticsearchServiceTest {
             assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
             assertEquals(expectedBody, responseBody);
         }
-    }
-
-    @SneakyThrows
-    public static JsonNode readFileContent(String fileName) {
-        return MAPPER.readTree(Book.class.getClassLoader().getResourceAsStream(fileName));
     }
 }

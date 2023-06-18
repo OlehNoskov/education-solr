@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static nix.education.functionals.ElasticsearchServiceTest.readFileContent;
+import static nix.education.data.FileContentReader.readFileContent;
 import static nix.education.util.SearchConstants.FQ;
 import static nix.education.util.SearchConstants.Q;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

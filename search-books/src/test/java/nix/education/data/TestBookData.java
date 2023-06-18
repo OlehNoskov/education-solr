@@ -13,8 +13,14 @@ import static nix.education.data.TestConstants.TITLE;
 
 public class TestBookData {
 
+    private static Book book = setupBook();
+
     public static Book getBook() {
-        Book book = new Book();
+        return book;
+    }
+
+    private static Book setupBook() {
+        book = new Book();
         book.setId(1L);
         book.setAuthor(AUTHOR);
         book.setTitle(TITLE);

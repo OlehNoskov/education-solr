@@ -15,13 +15,13 @@ import static junit.framework.TestCase.assertEquals;
 
 public class CensorHandlerTest {
 
-    private final HttpClient httpClient = HttpClientBuilder.create().build();
+    private final HttpClient HTTP_CLIENT = HttpClientBuilder.create().build();
     private final ObjectMapper MAPPER = new ObjectMapper();
 
     @Test
     public void handleRequestBody_ShouldFindBadWord() throws Exception {
         HttpGet request = new HttpGet("http://localhost:8983/solr/books/censor?q=author:ass");
-        HttpResponse response = httpClient.execute(request);
+        HttpResponse response = HTTP_CLIENT.execute(request);
 
         JsonNode responseBody =
             MAPPER.readTree(EntityUtils.toString(response.getEntity(), "UTF-8"));
@@ -34,7 +34,7 @@ public class CensorHandlerTest {
     @Test
     public void handleRequestBody_ShouldNotFindBadWord() throws Exception {
         HttpGet request = new HttpGet("http://localhost:8983/solr/books/censor?q=author:test");
-        HttpResponse response = httpClient.execute(request);
+        HttpResponse response = HTTP_CLIENT.execute(request);
         JsonNode responseBody =
             MAPPER.readTree(EntityUtils.toString(response.getEntity(), "UTF-8"));
         JsonNode expectedBody = readFileContent("censor-valid-word-response..json");
