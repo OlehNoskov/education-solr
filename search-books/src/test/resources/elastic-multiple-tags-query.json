@@ -1,0 +1,52 @@
+{
+  "numFound": 1,
+  "docs": [
+    {
+      "id": 8,
+      "author": "Erich Maria Remarque",
+      "title": "All Quiet on the Western Front",
+      "description": "This is the testament of Paul Bäumer, who enlists with his classmates in the German army during World War I. They become soldiers with youthful enthusiasm. But the world of duty, culture, and progress they had been taught breaks in pieces under the first bombardment in the trenches.",
+      "tags": [
+        {
+          "id": 6,
+          "tag": "Historic"
+        },
+        {
+          "id": 7,
+          "tag": "Drama"
+        },
+        {
+          "id": 8,
+          "tag": "War movie"
+        }
+      ],
+      "publicationDate": "2014-12-01T23:59:59.000+00:00"
+    }
+  ],
+  "facet_counts": {
+    "publication_date": [
+      {
+        "count": 1,
+        "label": "2009 TO 2014",
+        "fq": "publicationDate:[2009-12-30T00:00:00.000Z TO 2009-12-30T00:00:00.000Z+5YEAR]"
+      }
+    ],
+    "tags": [
+      {
+        "count": 1,
+        "label": "Drama",
+        "fq": "tags:Drama"
+      },
+      {
+        "count": 1,
+        "label": "Historic",
+        "fq": "tags:Historic"
+      },
+      {
+        "count": 1,
+        "label": "War movie",
+        "fq": "tags:War movie"
+      }
+    ]
+  }
+}

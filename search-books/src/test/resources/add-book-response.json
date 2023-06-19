@@ -1,0 +1,13 @@
+{
+  "id": 11,
+  "author": "Test book",
+  "title": "Test book",
+  "description": "Test description",
+  "tags": [
+    {
+      "id": 1,
+      "tag": "Programming"
+    }
+  ],
+  "publicationDate": "2019-11-01T21:00:00.000+00:00"
+}

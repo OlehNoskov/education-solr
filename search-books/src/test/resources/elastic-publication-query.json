@@ -1,0 +1,47 @@
+{
+  "numFound": 2,
+  "docs": [
+    {
+      "id": 2,
+      "author": "Bruce Eckel",
+      "title": "Thinking in Java",
+      "description": "Thinking in Java has earned raves from programmers worldwide for its extraordinary clarity,careful organization, and small, direct programming examples. From the fundamentals of Java syntax to its most advanced features, Thinking in Java is designed to teach, one simple step at a time.",
+      "tags": [
+        {
+          "id": 1,
+          "tag": "Programming"
+        }
+      ],
+      "publicationDate": "2019-12-01T23:59:59.000+00:00"
+    },
+    {
+      "id": 1,
+      "author": "Robert Martin",
+      "title": "Clean Code: A Handbook of Agile Software Craftsmanship",
+      "description": "Clean Code is divided into three parts. The first describes the principles, patterns, and practices of writing clean code. The second part consists of several case studies of increasing complexity. Each case study is an exercise in cleaning up code—of transforming a code base that has some problems into one that is sound and efficient. The third part is the payoff: a single chapter containing a list of heuristics and “smells” gathered while creating the case studies. The result is a knowledge base that describes the way we think when we write, read, and clean code.",
+      "tags": [
+        {
+          "id": 1,
+          "tag": "Programming"
+        }
+      ],
+      "publicationDate": "2019-11-01T23:00:00.000+00:00"
+    }
+  ],
+  "facet_counts": {
+    "publication_date": [
+      {
+        "count": 2,
+        "label": "2014 TO 2019",
+        "fq": "publicationDate:[2014-12-30T00:00:00.000Z TO 2014-12-30T00:00:00.000Z+5YEAR]"
+      }
+    ],
+    "tags": [
+      {
+        "count": 2,
+        "label": "Programming",
+        "fq": "tags:Programming"
+      }
+    ]
+  }
+}

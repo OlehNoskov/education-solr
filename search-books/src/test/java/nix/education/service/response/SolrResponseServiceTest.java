@@ -1,16 +1,14 @@
 package nix.education.service.response;
 
-import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.elasticsearch.core.search.Hit;
-import co.elastic.clients.elasticsearch.core.search.HitsMetadata;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import nix.education.BaseTestClass;
-import nix.education.entity.ElasticBook;
 import nix.education.service.BookDataService;
-import nix.education.service.response.elasticsearch.ElasticsearchResponseService;
+import nix.education.service.response.solr.SolrResponseService;
+import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.SolrDocumentList;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -27,42 +25,38 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
-public class ElasticsearchResponseServiceTest extends BaseTestClass {
+
+class SolrResponseServiceTest extends BaseTestClass {
 
     @Autowired
-    private ElasticsearchResponseService elasticsearchResponseService;
+    private SolrResponseService solrResponseService;
 
     @MockBean
     private BookDataService bookDataServiceMock;
 
     @Mock
-    private SearchResponse<ElasticBook> responseMock;
+    private QueryResponse queryResponseMock;
 
     @Mock
-    private HitsMetadata<ElasticBook> hitsMetadataMock;
-
-    @Mock
-    private List<Hit<ElasticBook>> listHitsMock;
+    private SolrDocumentList documentListMock;
 
     @Nested
-    @DisplayName("\"getQuery\" method should ")
+    @DisplayName("\"prepareResponse\" method should ")
     public class PrepareResponseTest {
 
         @Test
-        @DisplayName("return response")
-        public void shouldReturnResponseWhenBooksFound() {
-            when(responseMock.hits()).thenReturn(hitsMetadataMock);
-            when(hitsMetadataMock.hits()).thenReturn(listHitsMock);
-            when(hitsMetadataMock.hits().isEmpty()).thenReturn(false);
-            when(hitsMetadataMock.hits().size()).thenReturn(1);
+        @DisplayName("return correct response")
+        public void shouldReturnResponseWhenFoundBooks() {
+            when(queryResponseMock.getResults()).thenReturn(documentListMock);
+            when(documentListMock.isEmpty()).thenReturn(false);
+            when(documentListMock.size()).thenReturn(1);
             when(bookDataServiceMock.getBooks(anyList())).thenReturn(List.of(getBook()));
 
             Map<String, Object> expectedResponse = new LinkedHashMap<>();
             expectedResponse.put(NUM_FOUND, 1);
             expectedResponse.put(DOCS, List.of(getBook()));
             expectedResponse.put(FACET_COUNTS, Collections.emptyMap());
-            Map<String, Object> response =
-                elasticsearchResponseService.prepareResponse(responseMock);
+            Map<String, Object> response = solrResponseService.prepareResponse(queryResponseMock);
 
             assertEquals(expectedResponse, response);
         }
@@ -70,13 +64,12 @@ public class ElasticsearchResponseServiceTest extends BaseTestClass {
         @Test
         @DisplayName("return message")
         public void shouldReturnMessageWhenBooksNotFound() {
-            when(responseMock.hits()).thenReturn(hitsMetadataMock);
-            when(hitsMetadataMock.hits()).thenReturn(listHitsMock);
-            when(hitsMetadataMock.hits()).thenReturn(Collections.emptyList());
+            when(queryResponseMock.getResults()).thenReturn(documentListMock);
+            when(documentListMock.isEmpty()).thenReturn(true);
 
-            Map<String, Object> result = elasticsearchResponseService.prepareResponse(responseMock);
+            Map<String, Object> response = solrResponseService.prepareResponse(queryResponseMock);
 
-            assertEquals(DOCUMENTS_NOT_FOUND_MESSAGE, result);
+            assertEquals(DOCUMENTS_NOT_FOUND_MESSAGE, response);
         }
     }
 }

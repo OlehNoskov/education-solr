@@ -1,0 +1,10 @@
+{
+    "responseHeader": {
+        "status": 0,
+        "QTime": 9,
+        "params": {
+            "q": "author:ass"
+        }
+    },
+    "response": "Sorry, you typed a bad word: author:ass"
+}

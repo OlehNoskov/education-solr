@@ -1,0 +1,12 @@
+{
+  "suggest": {
+    "authorSuggester": {
+      "robe": {
+        "numFound": 1,
+        "suggestions": [
+          "robert"
+        ]
+      }
+    }
+  }
+}
